@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net481</TargetFramework>
+		<LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputPath>mod/plugins</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Include third-party and Unity/plugin DLLs, but exclude framework and system assemblies
+          to avoid conflicts with .NET Framework reference assemblies. -->
+    <LibDll Include="lib\**\*.dll" Exclude="lib\**\System.*;lib\**\Microsoft.*;lib\**\mscorlib.dll;lib\**\netstandard.dll;lib\**\System.Runtime.dll;lib\**\System.*.dll" />
+    <PackageReference Include="SharpDX" Version="4.2.0" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
+    <Reference Include="@(LibDll)">
+      <HintPath>%(LibDll.Identity)</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <PackageReference Include="CefGlue.Common" Version="91.4472.31">
+      <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- If both uppercase and lowercase generated nuget files exist on case-sensitive filesystems
+       MSBuild may try to import the same logical file twice. Remove the stray lowercase variants
+       before build to avoid duplicate-import warnings. -->
+  <Target Name="RemoveLowercaseNugetFiles" BeforeTargets="PrepareForBuild">
+    <Delete Files="$(MSBuildProjectDirectory)/obj/cefrainworld.csproj.nuget.g.props;$(MSBuildProjectDirectory)/obj/cefrainworld.csproj.nuget.g.targets;$(MSBuildProjectDirectory)/obj/cefrainworld.csproj.nuget.dgspec.json" ContinueOnError="true" />
+  </Target>
+
+  <ItemGroup>
+    <Content Include="cef\\**\\*">
+      <!-- Link controls the path seen by MSBuild in the output; using RecursiveDir
+           places the file under its subfolder(s) but without the leading 'bin\' -->
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
