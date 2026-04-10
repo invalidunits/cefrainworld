@@ -48,7 +48,10 @@ namespace CEFRainworld
         {
             string basePath = ModManager.GetModById("invalidunits.cefdep").basePath;
             string service = Path.GetFullPath(Path.Combine(basePath, "plugins/Xilium.CefGlue.BrowserProcess.exe"));
-            string log = Path.GetFullPath(Path.Combine(basePath, "cef.log"));
+            var tmpDir = Path.GetFullPath(Path.Combine(basePath, "tmp"));
+            if (!Directory.Exists(tmpDir)) Directory.CreateDirectory(tmpDir);
+            string log = Path.GetFullPath(Path.Combine(tmpDir, "tmp/cef.log"));
+            string cache = Path.GetFullPath(Path.Combine(tmpDir, "tmp/cache"));
             var settings = new CefSettings()
             {
                 // Allow command line args so we can disable GPU features that cause crashes on some platforms
@@ -57,6 +60,7 @@ namespace CEFRainworld
                 BackgroundColor = new CefColor(0, 0, 0, 0),
                 LogSeverity = CefLogSeverity.Verbose,
                 LogFile = log,
+                CachePath = cache,
                 WindowlessRenderingEnabled = true,
                 NoSandbox = true,                
                 BrowserSubprocessPath=service,

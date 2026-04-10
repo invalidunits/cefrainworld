@@ -19,7 +19,6 @@ namespace CEFRainworld
 
         public CEFRainworldPlugin() : base()
         {
-            Logger.LogDebug("Constructed!");
         }
 
         public void OnEnable()

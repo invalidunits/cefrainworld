@@ -33,21 +33,14 @@ namespace CEFRainworld
                     On.ProcessManager.PostSwitchMainProcess += ProcessManager_PostSwitchMainProcess;
 
 
-                    // Add Unmanaged DLLs to Path
-                    string plugins = Path.GetFullPath(Path.Combine(ModManager.GetModById("invalidunits.cefdep").basePath, "plugins"));
-                    CEFRainworldNative.SetDllDirectoryW(plugins);
+                    // Add Unmanaged DLLs to Search Path
+                    string cef = Path.GetFullPath(Path.Combine(ModManager.GetModById("invalidunits.cefdep").basePath, "plugins"));
+                    CEFRainworldNative.SetDllDirectoryW(cef);
                     CefRuntime.Load();
-
-                    // Logger.LogDebug(unmanaged);
-                    // Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.GetFullPath(unmanaged));
-
-
 
                     _app = new CEFRainworldApp();
                     try
                     {
-                        // Pass a small set of command-line switches to disable GPU/accelerated features.
-                        // These reduce GPU process crashes on some systems (observed in cef.log).
                         var cefArgs = new CefMainArgs(new string[]{});
                         CefRuntime.Initialize(cefArgs, CEFRainworldApp.BuildCEFSettings(),
                             _app, IntPtr.Zero);

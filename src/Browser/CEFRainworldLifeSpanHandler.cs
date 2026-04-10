@@ -28,7 +28,7 @@ namespace CEFRainworld
 
         protected override void OnBeforeClose(CefBrowser browser)
         {
-            CEFRainworldPlugin.Log.LogDebug("Browser !");
+            CEFRainworldPlugin.Log.LogDebug("Browser Closing!");
             browsers.TryRemove(browser.Identifier, out _);
             OnBrowserClose(this, browser.Identifier);
         }

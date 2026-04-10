@@ -348,7 +348,7 @@ namespace CEFRainworld
                     lock (_browser)
                     {
                         if (browser != _browser.Identifier) return;
-                        CEFRainworldPlugin.Log.LogDebug($"BrowserClosed: {browser}");
+                        CEFRainworldPlugin.Log.LogDebug($"Browser View Closed: {browser}");
                         _browser.Dispose();
                         _browser = null;
                     }
